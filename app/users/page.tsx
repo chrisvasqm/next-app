@@ -9,9 +9,8 @@ const UsersPage = async ({ searchParams: { sortOrder } }: Props) => {
   return (
     <div>
       <h1>Users</h1>
-      <Link href={'/users/new'} className='text-blue-500'>New</Link>
 
-      <p>{new Date().toLocaleTimeString()}</p>
+      <Link href={'/users/new'} className='btn'>New User</Link>
 
       <UsersTable sortOrder={sortOrder} />
     </div>
