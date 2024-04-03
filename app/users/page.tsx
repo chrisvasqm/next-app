@@ -1,7 +1,11 @@
 import Link from 'next/link';
 import UsersTable from './UsersTable';
 
-const UsersPage = async () => {
+interface Props {
+  searchParams: { sortOrder: string }
+}
+
+const UsersPage = async ({ searchParams: { sortOrder } }: Props) => {
   return (
     <div>
       <h1>Users</h1>
@@ -9,7 +13,7 @@ const UsersPage = async () => {
 
       <p>{new Date().toLocaleTimeString()}</p>
 
-      <UsersTable />
+      <UsersTable sortOrder={sortOrder} />
     </div>
   )
 }
