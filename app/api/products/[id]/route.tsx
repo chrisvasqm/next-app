@@ -1,11 +1,13 @@
+import prisma from "@/prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 import schema from "../schema";
 
-export function GET(request: NextRequest, { params }: { params: { id: number } }) {
-    if (params.id > 10)
-        return NextResponse.json({ error: 'Product not found' }, { status: 404 })
+export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+    const product = await prisma.product.findUnique({ where: { id: parseInt(params.id) } })
+    if (!product)
+        return NextResponse.json({ error: 'Product no found' }, { status: 404 })
 
-    return NextResponse.json({ id: 1, name: 'Milk', price: 2.5 })
+    return NextResponse.json(product)
 }
 
 export async function PUT(request: NextRequest, { params }: { params: { id: number } }) {
