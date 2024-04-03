@@ -9,6 +9,7 @@ const NavigationBar = () => {
             <Link href='/products'>Products</Link>
             <Link href='/admin'>Admin</Link>
             <Link href='/upload'>Upload</Link>
+            <Link href='/api/auth/signin'>Login</Link>
         </div>
     )
 }
