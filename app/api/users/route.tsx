@@ -1,4 +1,3 @@
-import { error } from "console";
 import { NextRequest, NextResponse } from "next/server";
 
 export function GET(request: NextRequest) {
