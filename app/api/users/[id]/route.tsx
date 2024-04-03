@@ -1,5 +1,7 @@
 import prisma from "@/prisma/client";
+import { error } from "console";
 import { NextRequest, NextResponse } from "next/server";
+import schema from "../schema";
 
 export async function GET(
     request: NextRequest,
@@ -15,17 +17,24 @@ export async function GET(
 
 export async function PUT(
     request: NextRequest,
-    { params }: { params: { id: number } }
+    { params }: { params: { id: string } }
 ) {
     const body = await request.json();
+    const validation = schema.safeParse(body);
+    if (!validation.success)
+        return NextResponse.json(validation.error.errors[0].message, { status: 400 })
 
-    if (!body.name)
-        return NextResponse.json({ error: 'Name is required' }, { status: 400 })
+    const user = await prisma.user.findUnique({ where: { id: parseInt(params.id) } })
 
-    if (params.id > 10)
+    if (!user)
         return NextResponse.json({ error: 'User not found' }, { status: 404 })
 
-    return NextResponse.json({ id: 1, name: body.name })
+    const updatedUser = await prisma.user.update({
+        where: { id: parseInt(params.id) },
+        data: { name: body.name, email: body.email }
+    })
+
+    return NextResponse.json(updatedUser)
 }
 
 export async function DELETE(
