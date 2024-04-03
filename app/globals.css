@@ -8,11 +8,20 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --foreground-rgb: 255, 255, 255;
+    --foreground-rgb: 105,105,105;
   }
 }
 
 body {
-  color: 'black';
+  color: rgb(var(--foreground-rgb));
+}
+
+main {
   padding: 1rem;
+}
+
+@layer base {
+  h1 {
+    @apply font-extrabold text-2xl
+  }
 }
