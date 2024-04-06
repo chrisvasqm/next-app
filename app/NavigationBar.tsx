@@ -1,4 +1,5 @@
 'use client'
+import { stat } from 'fs';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import React from 'react'
@@ -13,12 +14,9 @@ const NavigationBar = () => {
             <Link href='/products'>Products</Link>
             <Link href='/admin'>Admin</Link>
             <Link href='/upload'>Upload</Link>
-            {
-                status === 'unauthenticated' ?
-                    <Link href='/api/auth/signin'>Login</Link> :
-                    <div>{session?.user?.name}</div>
-            }
-        </div>
+            {status === 'unauthenticated' && <Link href='/api/auth/signin'>Login</Link>}
+            {status === 'authenticated' && <div>{session?.user?.name} <Link href={'/api/auth/signout'} className='ml-3'>Sign Out</Link></div>}
+        </div >
     )
 }
 
