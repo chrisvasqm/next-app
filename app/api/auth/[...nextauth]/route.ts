@@ -1,41 +1,6 @@
-import prisma from "@/prisma/client";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import bcrypt from 'bcrypt';
-import { NextAuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
-import CredentialsProvider from "next-auth/providers/credentials";
-import GoogleProvider from 'next-auth/providers/google';
-
-export const authOptions: NextAuthOptions = {
-    adapter: PrismaAdapter(prisma),
-    providers: [
-        GoogleProvider({
-            clientId: process.env.GOOGLE_CLIENT_ID!,
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET!
-        }),
-        CredentialsProvider({
-            credentials: {
-                email: { label: 'Email', type: 'email', placeholder: 'Email' },
-                password: { label: 'Password', type: 'password', placeholder: 'Password' }
-            },
-            async authorize(credentials, req) {
-                if (!credentials?.email || !credentials.password) return null
-
-                const user = await prisma.user.findUnique({ where: { email: credentials.email } })
-
-                if (!user) return null
-
-                const passwordsMatched = await bcrypt.compare(credentials.password, user.hashedPassword!)
-
-                return passwordsMatched ? user : null
-            }
-        })
-    ],
-    session: {
-        strategy: 'jwt'
-    }
-};
+import authOptions from "./authOptions";
 
 const handler = NextAuth(authOptions);
 
-export { handler as GET, handler as POST }
+export { handler as GET, handler as POST };
